@@ -2,6 +2,12 @@ package guru.qa.niffler.jupiter;
 
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.AllureId;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -38,8 +44,24 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        Parameter[] parameters = context.getRequiredTestMethod().getParameters();
-        for (Parameter parameter : parameters) {
+        List<Method> handleMethods = new ArrayList<>();
+        handleMethods.add(context.getRequiredTestMethod());
+        Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
+              .filter(method -> method.isAnnotationPresent(BeforeEach.class))
+              .forEach(handleMethods::add);
+
+        List<Parameter> handleParameters = handleMethods.stream()
+                                                        .map(Executable::getParameters)
+                                                        .flatMap(Arrays::stream)
+                                                        .filter(parameter -> parameter.getType()
+                                                                                      .isAssignableFrom(
+                                                                                          UserJson.class))
+                                                        .filter(
+                                                            parameter -> parameter.isAnnotationPresent(
+                                                                User.class))
+                                                        .toList();
+
+        for (Parameter parameter : handleParameters) {
             if (parameter.getType().isAssignableFrom(UserJson.class)) {
                 User parameterAnnotation = parameter.getAnnotation(User.class);
                 User.UserType userType = parameterAnnotation.userType();

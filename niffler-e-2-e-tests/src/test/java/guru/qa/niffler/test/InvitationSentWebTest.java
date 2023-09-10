@@ -27,8 +27,7 @@ public class InvitationSentWebTest extends BaseWebTest {
   @Test
   @AllureId("104")
   @DisplayName("В таблице пользователей есть пользователь с текстом 'Pending invitation'")
-  void shouldBeDisplayedPendingInvitation(@User(userType = INVITATION_SENT) UserJson userForTest)
-      throws InterruptedException {
+  void shouldBeDisplayedPendingInvitation() {
     $("[data-tooltip-id=people]").click();
     $(".people-content .main-content__section table tbody")
         .$$("tr")

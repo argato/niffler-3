@@ -18,20 +18,19 @@ import org.junit.jupiter.api.Test;
 public class InvitationReceivedWebTest extends BaseWebTest {
 
   @BeforeEach
-  void doLogin(@User(userType = INVITATION_RECEIVED) UserJson userForTest) {
+  void doLogin() {
     open("http://127.0.0.1:3000/main");
-    $("a[href*='redirect']").click();
-    $("input[name='username']").setValue(userForTest.getUsername());
-    $("input[name='password']").setValue(userForTest.getPassword());
-    $("button[type='submit']").click();
   }
 
   @Test
   @AllureId("105")
   @DisplayName("В таблице пользователей есть пользователь с доступными кнопками принять/отказать")
   void shouldBeDisplayedWaitingApprovedFriend(
-      @User(userType = INVITATION_RECEIVED) UserJson userForTest)
-      throws InterruptedException {
+      @User(userType = INVITATION_RECEIVED) UserJson userForTest) {
+    $("a[href*='redirect']").click();
+    $("input[name='username']").setValue(userForTest.getUsername());
+    $("input[name='password']").setValue(userForTest.getPassword());
+    $("button[type='submit']").click();
     $("[data-tooltip-id=friends]").click();
     ElementsCollection rows = $(".people-content .main-content__section table tbody")
         .$$("tr");

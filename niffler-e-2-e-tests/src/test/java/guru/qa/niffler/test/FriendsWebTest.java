@@ -32,8 +32,7 @@ public class FriendsWebTest extends BaseWebTest {
   @Test
   @AllureId("101")
   @DisplayName("Отображается один друг в таблице друзей")
-  void friendShouldBeDisplayedInTableFriends(@User(userType = WITH_FRIENDS) UserJson userForTest)
-      throws InterruptedException {
+  void friendShouldBeDisplayedInTableFriends(@User(userType = WITH_FRIENDS) UserJson userForTest) {
     $("[data-tooltip-id=friends]").click();
     ElementsCollection rows = $(".people-content .main-content__section table tbody")
         .$$("tr");
@@ -44,8 +43,7 @@ public class FriendsWebTest extends BaseWebTest {
   @Test
   @AllureId("102")
   @DisplayName("Отображается один друг в таблице пользователей")
-  void friendShouldBeDisplayedInTablePeople(@User(userType = WITH_FRIENDS) UserJson userForTest)
-      throws InterruptedException {
+  void friendShouldBeDisplayedInTablePeople(@User(userType = WITH_FRIENDS) UserJson userForTest) {
     $("[data-tooltip-id=people]").click();
     $(".people-content .main-content__section table tbody")
         .$$("tr")
@@ -57,8 +55,7 @@ public class FriendsWebTest extends BaseWebTest {
   @AllureId("103")
   @DisplayName("Отображается кнопка удаления друга")
   void deletingButtonShouldBeDisplayedInTablePeople(
-      @User(userType = WITH_FRIENDS) UserJson userForTest)
-      throws InterruptedException {
+      @User(userType = WITH_FRIENDS) UserJson userForTest) {
     $("[data-tooltip-id=people]").click();
     SelenideElement row = $(".people-content .main-content__section table tbody")
         .$$("tr").filter(text("You are friends")).get(0);
